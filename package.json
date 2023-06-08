@@ -10,6 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "inquirer": "^8.2.4"
+    "figlet": "^1.6.0",
+    "inquirer": "^8.2.4",
+    "table": "^6.8.1"
   }
 }
