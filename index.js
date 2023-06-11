@@ -52,14 +52,14 @@ const questions = [
             name: 'Add Role',
             value: 'addRoles'
         },
-        // {
-        //     name: 'Add Employee',
-        //     value: 'addEmployee'
-        // },
-        // {
-        //     name: 'Update Employee Role',
-        //     value: 'updateEmployeeRole'
-        // }
+        {
+            name: 'Add Employee',
+            value: 'addEmployee'
+        },
+        {
+            name: 'Update Employee Role',
+            value: 'updateEmployeeRole'
+        }
     ]
 }
 ];
@@ -68,7 +68,7 @@ function init(){
     inquirer
     .prompt(questions)
     .then((answers) => {
-        console.log(answers)
+        // console.log(answers)
         questionAnswers(answers)
     })
 }
@@ -90,8 +90,9 @@ function questionAnswers(options) {
             console.table(results);
         });
     }
+    
     else if(options.options == 'addDepartment'){
-        const optionFourQuestion = [
+        const addingDepartment = [
             {
                 type: 'input',
                 message: 'What is the name of the new department?',
@@ -99,9 +100,9 @@ function questionAnswers(options) {
             }
         ];
         inquirer
-        .prompt(optionFourQuestion)
+        .prompt(addingDepartment)
         .then((answers) => {
-            db.query(`INSERT INTO department (name) VALUES (?)`, answers.newDepartment, function (err,results) {
+            db.query(`INSERT INTO department (name) VALUES (${answers.newDepartment})`, function (err,results) {
                 console.table(results);
             });
             init();
@@ -117,7 +118,7 @@ function questionAnswers(options) {
         const addingRoles = [
             {
                 type: 'input',
-                message: 'What role would you like to add?',
+                message: 'What is the name of the role?',
                 name: 'newRole'
             },
             {
@@ -127,7 +128,7 @@ function questionAnswers(options) {
             },
             {
                 type: 'list',
-                message: 'message',
+                message: 'Which deparment does the role belong to?',
                 name: 'addedDepartment',
                 choices: deparments
             }
@@ -135,7 +136,10 @@ function questionAnswers(options) {
         inquirer
         .prompt(addingRoles)
         .then((answers) => {
-            db.query(`INSERT INTO role (title) VALUES (?)`, )
+            db.query(`INSERT INTO role (title, salary, department_id) VALUES (${answers.newRole}, ${answers.newSalary}, ${answers.departments})`, function (err, results) {
+                console.table(results);
+            });
+            init();
         })
 
     }
