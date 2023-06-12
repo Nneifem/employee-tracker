@@ -68,7 +68,6 @@ function init(){
     inquirer
     .prompt(questions)
     .then((answers) => {
-        // console.log(answers)
         questionAnswers(answers)
     })
 }
@@ -79,16 +78,19 @@ function questionAnswers(options) {
         db.query('SELECT * FROM department', function (err,results) {
             console.table(results);
         });
+        init();
     }
     else if(options.options == 'viewRoles'){
         db.query('SELECT * FROM role', function (err,results) {
             console.table(results);
         });
+        init();
     }
     else if(options.options == 'viewEmployees'){
         db.query('SELECT * FROM employee', function (err,results) {
             console.table(results);
         });
+        init();
     }
     
     else if(options.options == 'addDepartment'){
@@ -144,9 +146,83 @@ function questionAnswers(options) {
 
     }
     else if(options.options == 'addEmployee'){
-        db.query()
+        const roles = [];
+        db.query('SELECT title FROM role', function (err, results) {
+            for(var i = 0; i < results.length; i++){
+                roles.push(results[i])
+            }
+        })
+
+        const employeeManagers = [];
+        db.query('SELECT first_name, last_name FROM employee', function (err, results) {
+            for(var i = 0; i < results.length; i++){
+                employeeManagers.push(results[i])
+            }
+        })
+        const addingEmployees = [
+            {
+                type: 'input',
+                message: 'What is the first name of the employee?',
+                name: 'newEmployeeFirstName'
+            },
+            {
+                type: 'input',
+                message: 'What is the last name of the employee?',
+                name: 'newEmployeeLastName'
+            },
+            {
+                type: 'list',
+                message: 'What is the role of the new employee?',
+                name: 'employeeRole',
+                choices: roles
+            },
+            {
+                type: 'list',
+                message: 'Who is the manager of the employee?',
+                name: 'newEmployeeManager',
+                choices: employeeManagers
+            }
+        ];
+        inquirer
+        .prompt(addingEmployees)
+        .then((answers) => {
+            db.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (${answers.newEmployeeFirstName}, ${answers.newEmployeeLastName}, ${answers.roles}, ${answers.employeeManagers})`, function (err, results) {
+                console.table(results);
+            });
+            init();
+        })
     }
-    else if(options.options == 'updateEmployeeRole'){
-        db.query()
-    }
+    // else if(options.options == 'updateEmployeeRole'){
+    //     const currentEmployees = [];
+    //     db.query('SELECT first_name, last_name FROM employee', function (err, results){
+    //         for(var i = 0; i < results.length; i++){
+    //             currentEmployees.push(results[i])
+    //         }
+    //     })
+    //     const currentRoles = [];
+    //     db.query('SELECT title FROM role', function (err, results) {
+    //         for(var i = 0; i < results.length; i++){
+    //             currentRoles.push(results[i])
+    //         }
+    //     })
+    //     const updatingEmployeeRoles = [
+    //         {
+    //             type: 'list',
+    //             message: 'Which employee do you want to update their role?',
+    //             name: 'employeeName',
+    //             choices: currentEmployees
+    //         },
+    //         {
+    //             type: 'list',
+    //             message: 'Whic role do you want to assign to selected employee?',
+    //             name: 'employeeNewRole',
+    //             choices: currentRoles
+    //         }
+    //     ];
+    //     inquirer
+    //     .prompt(updatingEmployeeRoles)
+    //     .then((answers) => {
+    //         db.query(``)
+    //     })
+    // }
 }
