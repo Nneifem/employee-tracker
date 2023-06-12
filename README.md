@@ -2,13 +2,6 @@
 
 ## Description
 
-Provide a short description explaining the what, why, and how of your project. Use the following questions as a guide:
-
-- What was your motivation?
-- Why did you build this project? (Note: the answer is not "Because it was a homework assignment.")
-- What problem does it solve?
-- What did you learn?
-
 The employee-tracker has been created in order to have an organized and quick way of accessing and modifying employee's information, the department they work in, their role, who is the manager, and salary. This solves the problem of having a disorganized way of keeping track of the information with how strict sql can be and have an easy way to edit or view certain tables if needed. Working on this project showed me how to incorporate sql with routes and inquirer and getting them to work together. Also helped me learned more about using sql, letting me get more familiar and comfortable working with databases.
 
 
