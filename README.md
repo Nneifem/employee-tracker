@@ -11,7 +11,7 @@ To get the project to work properly, you will need to install Node js. v16, figl
 
 ## Usage
 
-Link to demo the employee-tracker:
+Link to demo the employee-tracker: https://drive.google.com/file/d/1P7EV2ii9jgU8vFqMFrYb0rvc-ZMV_02G/view?usp=drive_link
 
 After everything has been installed, open the integrated terminal, type node index and then you will be greeted with employee manager in big text and a list of options to pick from that you can either view tables or add more information.
 

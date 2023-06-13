@@ -14,17 +14,6 @@ const db = mysql.createConnection(
     console.log('connected')
 )
 
-// will display a text before the question displayed 
-figlet("Employee Manager", function (err, data) {
-    if (err) {
-        console.log('error');
-        console.dir(err);
-        return;
-    }
-    console.log(data);
-});
-
-// list of questions the user can choose from
 const questions = [
 {
     type: 'list',
@@ -103,17 +92,18 @@ function questionAnswers(options) {
         inquirer
         .prompt(addingDepartment)
         .then((answers) => {
-            db.query(`INSERT INTO department (name) VALUES (${answers.newDepartment})`, function (err,results) {
+            db.query(`INSERT INTO department (name) VALUES ('${answers.newDepartment}')`, function (err,results) {
+                console.log('New department was added');
                 console.table(results);
                 init();
             });
         })
     }
     else if(options.options == 'addRoles'){
-        const deparments = [];
+        const departments = [];
         db.query('SELECT * FROM department', function (err, results) {
             for(var i = 0; i < results.length; i++){
-                deparments.push(results[i])
+                departments.push(results[i])
             }
         })
         const addingRoles = [
@@ -131,13 +121,19 @@ function questionAnswers(options) {
                 type: 'list',
                 message: 'Which deparment does the role belong to?',
                 name: 'addedDepartment',
-                choices: deparments
+                choices: departments
+            },
+            {
+                type: 'input',
+                message: 'What is the department id?',
+                name: 'departmentID'
             }
         ];
         inquirer
         .prompt(addingRoles)
         .then((answers) => {
-            db.query(`INSERT INTO role (title, salary, department_id) VALUES (${answers.newRole}, ${answers.newSalary}, ${answers.departments})`, function (err, results) {
+            db.query(`INSERT INTO role (title, salary, department_id) VALUES ('${answers.newRole}', '${answers.newSalary}', '${answers.departmentID}')`, function (err, results) {
+                console.log('New role was added.');
                 console.table(results);
                 init();
             });
@@ -175,16 +171,27 @@ function questionAnswers(options) {
                 choices: roles
             },
             {
+                type: 'input',
+                message: 'What is the role id of the employee?',
+                name: 'employeeRoleID'
+            },
+            {
                 type: 'list',
                 message: 'Who is the manager of the employee?',
                 name: 'newEmployeeManager',
                 choices: employeeManagers
+            },
+            {
+                type: 'input',
+                message: 'What is the role id of the manager if any?',
+                name: 'managerID'
             }
         ];
         inquirer
         .prompt(addingEmployees)
         .then((answers) => {
-            db.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (${answers.newEmployeeFirstName}, ${answers.newEmployeeLastName}, ${answers.roles}, ${answers.employeeManagers})`, function (err, results) {
+            db.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ('${answers.newEmployeeFirstName}', '${answers.newEmployeeLastName}', '${answers.employeeRoleID}', '${answers.managerID}')`, function (err, results) {
+                console.log('New employee was added.');
                 console.table(results);
                 init();
             });
@@ -219,11 +226,11 @@ function questionAnswers(options) {
         ];
         inquirer
         .prompt(updatingEmployeeRoles)
-        .then((answers) => {
-            db.query(`UPDATE employee SET first_name, last_name = ${answers.currentEmployees} WHERE role_id = ${answers.currentRoles}`, function (err, results){
+        .then((answers) => { 
+                db.query(`UPDATE employee SET first_name, last_name = '${answers.currentEmployees}' WHERE role_id = '${answers.currentRoles}'`)
+                console.log('Employee and the role has been updated.');
                 console.table(results);
                 init();
-            })
         })
     }
 }
